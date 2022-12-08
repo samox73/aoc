@@ -16,7 +16,7 @@ func GetInput(day, year int) string {
 		log.Fatal(err)
 	}
 	request.Header = http.Header{
-		"Cookie": {"session=" + Read(".sessionid")},
+		"Cookie": {"session=" + Read("~/.config/aoc/sessionid")},
 	}
 	response, err := client.Do(request)
 	if err != nil {
