@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/samox73/aoc/utils"
+	"github.com/samox73/aoc/go/utils"
 )
 
 func main() {
