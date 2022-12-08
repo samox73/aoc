@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -15,8 +16,15 @@ func GetInput(day, year int) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+	dirname, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+	sessionId := Read(dirname + "/.config/aoc/sessionid")
+	sessionId = strings.TrimSuffix(sessionId, "\n")
+	fmt.Println(sessionId)
 	request.Header = http.Header{
-		"Cookie": {"session=" + Read("~/.config/aoc/sessionid")},
+		"Cookie": {"session=" + sessionId},
 	}
 	response, err := client.Do(request)
 	if err != nil {
@@ -24,8 +32,7 @@ func GetInput(day, year int) string {
 	}
 	body, err := ioutil.ReadAll(response.Body)
 	input := string(body)
-	fmt.Println(input)
-	return input
+	return strings.TrimSuffix(input, "\n")
 }
 
 func Read(fileName string) string {
