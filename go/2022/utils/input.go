@@ -22,7 +22,6 @@ func GetInput(day, year int) string {
 	}
 	sessionId := Read(dirname + "/.config/aoc/sessionid")
 	sessionId = strings.TrimSuffix(sessionId, "\n")
-	fmt.Println(sessionId)
 	request.Header = http.Header{
 		"Cookie": {"session=" + sessionId},
 	}
@@ -51,4 +50,8 @@ func SplitPair(text, c string) (string, string) {
 func SplitIntPair(text, c string) (int64, int64) {
 	s1, s2 := SplitPair(text, c)
 	return ToInt(s1), ToInt(s2)
+}
+
+func GetLines(input string) []string {
+	return strings.Split(input, "\n")
 }
