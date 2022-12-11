@@ -11,8 +11,8 @@ func main() {
 	input := utils.GetInput(6, 2022)
 	solutionA := PartA(input)
 	solutionB := PartB(input)
-	fmt.Printf("Day 05 solution A: %d\n", solutionA)
-	fmt.Printf("Day 05 solution B: %d\n", solutionB)
+	fmt.Printf("Day 06 solution A: %d\n", solutionA)
+	fmt.Printf("Day 06 solution B: %d\n", solutionB)
 }
 
 func PartA(input string) int {
