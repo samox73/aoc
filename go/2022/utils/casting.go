@@ -5,18 +5,18 @@ import (
 	"strconv"
 )
 
-func ToInt(s string) int64 {
-	marks, err := strconv.ParseInt(s, 10, 0)
+func ToInt(s string) int {
+	marks, err := strconv.Atoi(s)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return marks
 }
 
-func ToInts(arr []string) []int64 {
-	var ints []int64
+func ToInts(arr []string) []int {
+	var ints []int
 	for _, s := range arr {
-		i, err := strconv.ParseInt(s, 10, 0)
+		i, err := strconv.Atoi(s)
 		if err != nil {
 			log.Fatal(err)
 		}

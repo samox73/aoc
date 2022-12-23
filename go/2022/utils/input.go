@@ -47,7 +47,7 @@ func SplitPair(text, c string) (string, string) {
 	return s[0], s[1]
 }
 
-func SplitIntPair(text, c string) (int64, int64) {
+func SplitIntPair(text, c string) (int, int) {
 	s1, s2 := SplitPair(text, c)
 	return ToInt(s1), ToInt(s2)
 }
