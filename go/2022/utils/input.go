@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,7 +10,7 @@ import (
 	"strings"
 )
 
-func GetInput(day, year int) string {
+func downloadInput(day, year int) string {
 	client := http.Client{}
 	url := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
 	request, err := http.NewRequest("GET", url, nil)
@@ -32,6 +33,38 @@ func GetInput(day, year int) string {
 	body, err := ioutil.ReadAll(response.Body)
 	input := string(body)
 	return strings.TrimSuffix(input, "\n")
+}
+
+func readInputFile() string {
+	contents, err := os.ReadFile("input.txt")
+	if err != nil {
+		panic(err)
+	}
+	return string(contents)
+}
+
+func GetInput(day, year int) string {
+	filename := "input.txt"
+	if _, err := os.Stat(filename); err == nil {
+		return readInputFile()
+	} else if errors.Is(err, os.ErrNotExist) {
+		input := downloadInput(day, year)
+		f, err := os.Create("input.txt")
+		if err != nil {
+			panic(err)
+		}
+		defer func() {
+			if err := f.Close(); err != nil {
+				panic(err)
+			}
+		}()
+		if _, err = f.WriteString(input); err != nil {
+			panic(err)
+		}
+		return input
+	} else {
+		return ""
+	}
 }
 
 func Read(fileName string) string {

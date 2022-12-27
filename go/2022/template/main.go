@@ -20,6 +20,5 @@ func PartA(input string) int {
 }
 
 func PartB(input string) int {
-	fmt.Println(input)
 	return 0
 }
