@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/samox73/aoc/go/2022/utils"
+	. "github.com/samox73/aoc/go/2022/utils"
 )
 
 func main() {
