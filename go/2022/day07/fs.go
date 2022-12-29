@@ -8,7 +8,7 @@ import (
 
 type File struct {
 	name   string
-	size   int64
+	size   int
 	dir    *Dir
 	parent *File
 }
@@ -66,7 +66,7 @@ func (f *File) AddFiles(files []File) {
 	}
 }
 
-func (f *File) GetDirsWithMaxSize(maxSize int64) []File {
+func (f *File) GetDirsWithMaxSize(maxSize int) []File {
 	var files []File
 	if f.IsDir() {
 		for _, file := range *f.dir {
@@ -79,7 +79,7 @@ func (f *File) GetDirsWithMaxSize(maxSize int64) []File {
 	return files
 }
 
-func (f *File) GetDirsWithMinSize(minSize int64) []File {
+func (f *File) GetDirsWithMinSize(minSize int) []File {
 	var files []File
 	if f.IsDir() {
 		for _, file := range *f.dir {
@@ -108,8 +108,8 @@ func (f *File) ToString(tab int) string {
 
 type Dir []File
 
-func (f *File) GetSize() int64 {
-	size := int64(0)
+func (f *File) GetSize() int {
+	size := 0
 	if f.IsDir() {
 		d := f.dir
 		for _, file := range *d {

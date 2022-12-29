@@ -17,10 +17,10 @@ func main() {
 }
 
 type Tree struct {
-	height      int64
+	height      int
 	visible     bool
 	x, y        int
-	scenicScore int64
+	scenicScore int
 }
 
 type TreeField [][]Tree
@@ -88,7 +88,7 @@ func (t *Tree) setVisibility(field TreeField) {
 	fmt.Printf("Tree at (%d,%d) is visible: %t\n", t.x, t.y, t.visible)
 }
 
-func PartA(input string) int64 {
+func PartA(input string) int {
 	field := ParseField(input)
 	setVisibilities(field)
 	count := 0
@@ -104,7 +104,7 @@ func PartA(input string) int64 {
 		fmt.Println()
 		fmt.Println()
 	}
-	return int64(count)
+	return count
 }
 
 func setScenicScores(field TreeField) {
@@ -121,28 +121,28 @@ func setScenicScores(field TreeField) {
 func (t *Tree) setScenicScore(field TreeField) {
 	lenY := len(field)
 	lenX := len((field)[0])
-	scoreRight := int64(0)
+	scoreRight := 0
 	for x := t.x + 1; x < lenX; x++ {
 		scoreRight++
 		if field[t.y][x].height >= t.height {
 			break
 		}
 	}
-	scoreLeft := int64(0)
+	scoreLeft := 0
 	for x := t.x - 1; x >= 0; x-- {
 		scoreLeft++
 		if field[t.y][x].height >= t.height {
 			break
 		}
 	}
-	scoreDown := int64(0)
+	scoreDown := 0
 	for y := t.y + 1; y < lenY; y++ {
 		scoreDown++
 		if field[y][t.x].height >= t.height {
 			break
 		}
 	}
-	scoreUp := int64(0)
+	scoreUp := 0
 	for y := t.y - 1; y >= 0; y-- {
 		scoreUp++
 		if field[y][t.x].height >= t.height {
@@ -152,10 +152,10 @@ func (t *Tree) setScenicScore(field TreeField) {
 	t.scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight
 }
 
-func PartB(input string) int64 {
+func PartB(input string) int {
 	field := ParseField(input)
 	setScenicScores(field)
-	scenicScore := int64(0)
+	scenicScore := 0
 	for _, row := range field {
 		for _, tree := range row {
 			if tree.scenicScore > scenicScore {

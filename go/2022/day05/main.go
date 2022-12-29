@@ -24,10 +24,10 @@ func PartB(input string) string {
 		stackFrom := &stacks[instruction.from]
 		stackTo := &stacks[instruction.to]
 		crates := make([]string, instruction.count)
-		for i := int64(0); i < instruction.count; i++ {
+		for i := 0; i < instruction.count; i++ {
 			crates[i] = stackFrom.Pop()
 		}
-		for i := instruction.count - 1; i > int64(-1); i-- {
+		for i := instruction.count - 1; i > -1; i-- {
 			stackTo.Put(crates[i])
 		}
 	}
@@ -45,7 +45,7 @@ func PartA(input string) string {
 	for _, instruction := range instructions {
 		stackFrom := &stacks[instruction.from]
 		stackTo := &stacks[instruction.to]
-		for i := int64(0); i < instruction.count; i++ {
+		for i := 0; i < instruction.count; i++ {
 			crate := stackFrom.Pop()
 			stackTo.Put(crate)
 		}

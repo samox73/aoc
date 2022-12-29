@@ -16,25 +16,25 @@ func main() {
 	fmt.Printf("Day 07 solution B: %d\n", solutionB)
 }
 
-func PartA(input string) int64 {
+func PartA(input string) int {
 	root := ParseDir(input)
 	fmt.Println(root.ToString(0))
 	files := root.GetDirsWithMaxSize(100000)
-	combinedSize := int64(0)
+	combinedSize := 0
 	for _, file := range files {
 		combinedSize += file.GetSize()
 	}
 	return combinedSize
 }
 
-func PartB(input string) int64 {
+func PartB(input string) int {
 	root := ParseDir(input)
 	dirSize := root.GetSize()
-	maxRootSize := int64(70000000 - 30000000)
+	maxRootSize := 70000000 - 30000000
 	smallestSufficientSize := dirSize - maxRootSize
 	fmt.Println(smallestSufficientSize)
 	files := root.GetDirsWithMinSize(smallestSufficientSize)
-	result := int64(9999999999999)
+	result := 9999999999999
 	for _, file := range files {
 		size := file.GetSize()
 		fmt.Println(size)
@@ -52,7 +52,7 @@ func ParseLs(lines []string) []File {
 			continue
 		}
 		tokens := strings.Split(line, " ")
-		size := int64(0)
+		size := 0
 		var dir *Dir
 		fmt.Println(">> ", line)
 		if tokens[0] == "dir" {

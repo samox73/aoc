@@ -16,7 +16,7 @@ func main() {
 }
 
 type assignment struct {
-	from, to int64
+	from, to int
 }
 
 func FullyRedundant(x, y assignment) bool {
