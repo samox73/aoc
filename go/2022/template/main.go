@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	input := utils.GetInput(DAY_SMALL, 2022)
+	input := GetInput(DAY_SMALL, 2022)
 	solutionA := PartA(input)
 	solutionB := PartB(input)
 	fmt.Printf("Day DAY_SMALL solution A: %d\n", solutionA)
