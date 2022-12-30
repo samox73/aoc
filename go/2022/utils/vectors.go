@@ -1,23 +1,23 @@
 package utils
 
 type Vec2 struct {
-	x, y int
+	X, Y int
 }
 
 type Pos2 struct {
-	x, y int
+	X, Y int
 }
 
 func (p *Pos2) Add(v Vec2) {
-	p.x += v.x
-	p.y += v.y
+	p.X += v.X
+	p.Y += v.Y
 }
 
 func (p *Pos2) Sub(that Pos2) {
-	p.x -= that.x
-	p.y -= that.y
+	p.X -= that.X
+	p.Y -= that.Y
 }
 
 func (this Pos2) Equals(that Pos2) bool {
-	return this.x == that.x && this.y == that.y
+	return this.X == that.X && this.Y == that.Y
 }
