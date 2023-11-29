@@ -83,15 +83,18 @@ func (g *grid) print() {
 	fmt.Printf("End:   (%d, %d)\n\n", g.end.pos.X, g.end.pos.Y)
 	for _, line := range g.nodes {
 		for _, node := range line {
-			s := fmt.Sprintf("%3d", node.height)
+			s := fmt.Sprintf("%1d", node.height)
+			if node.height > 9 {
+				s = string('a' + rune(node.height-10))
+			}
 			if node.height == 0 || node.height == 27 {
-				s = CyanBackground(s)
+				s = Black(CyanBackground(s))
 			} else if node.onShortestPath {
 				s = Cyan(s)
 			} else if node.visited {
-				s = Black(s)
+				s = Color(s, 200, 200, 200)
 			} else {
-				s = "   "
+				s = " "
 			}
 			fmt.Printf("%s", s)
 		}

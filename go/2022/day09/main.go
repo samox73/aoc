@@ -82,7 +82,9 @@ func (s *snake) move(v vec) {
 func main() {
 	input := utils.GetInput(9, 2022)
 	solutionA := PartA(input)
+	fmt.Println("here2")
 	solutionB := PartB(input)
+	fmt.Println("here3")
 	fmt.Printf("Day 09 solution A: %d\n", solutionA)
 	fmt.Printf("Day 09 solution B: %d\n", solutionB)
 }

@@ -18,6 +18,11 @@ func BackgroundFromRGB(r, g, b int) string {
 	return fmt.Sprintf("\033[48;2;%d;%d;%dm", r, g, b)
 }
 
+func Color[K colorable](v K, r, g, b int) string {
+	c := fmt.Sprintf("%v", v)
+	return ColorFromRGB(r, g, b) + c + colorNone
+}
+
 func Black[K colorable](v K) string {
 	c := fmt.Sprintf("%v", v)
 	return ColorFromRGB(0, 0, 0) + c + colorNone

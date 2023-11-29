@@ -46,6 +46,7 @@ func readInputFile() string {
 func GetInput(day, year int) string {
 	filename := "input.txt"
 	if _, err := os.Stat(filename); err == nil {
+		fmt.Println("found file")
 		return readInputFile()
 	} else if errors.Is(err, os.ErrNotExist) {
 		input := downloadInput(day, year)
