@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" || ${#1} != 2 ]]; then
+    echo "Usage: $0 day"
+    exit 1
+fi
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+
+dir="day$1"
+cp -r "$script_dir/template/dayXX" "$dir"
+cp "$script_dir/template/main.rs" .
+find "$script_dir" -type f -name "*.rs" -print0 | xargs -0 sed -i 's/XX/'"$1"'/g'

@@ -27,19 +27,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "aoc-2023"
-version = "0.1.0"
-dependencies = [
- "aoc-utils",
- "regex",
-]
-
-[[package]]
 name = "aoc-utils"
 version = "0.1.0"
 dependencies = [
  "dirs",
  "reqwest",
+]
+
+[[package]]
+name = "aoc02023"
+version = "0.1.0"
+dependencies = [
+ "aoc-utils",
+ "regex",
 ]
 
 [[package]]
