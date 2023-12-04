@@ -81,7 +81,6 @@ fn parse_symbols(input: &str) -> Vec<Symbol> {
         let value = cap.get(0).unwrap().as_str().chars().nth(0).unwrap();
         let x = loc % line_length + 1;
         let y = loc / line_length + 1;
-        println!("v: {}, x: {}, y: {}", value, x, y);
         symbols.push(Symbol {
             value,
             x,
