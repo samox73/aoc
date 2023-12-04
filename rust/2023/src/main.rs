@@ -1,9 +1,9 @@
 #![feature(test)]
 
-mod day04;
+mod day04_optimized;
 
 fn main() {
     let input = aoc_utils::get_input(2023, 04);
-    day04::solve_a(&input);
-    day04::solve_b(&input);
+    day04_optimized::solve_a(&input);
+    day04_optimized::solve_b(&input);
 }

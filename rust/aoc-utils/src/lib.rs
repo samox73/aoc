@@ -78,7 +78,6 @@ fn get_cached_file_path(year: i16, day: i8) -> PathBuf {
 
 fn get_cached_input(year: i16, day: i8) -> Result<String, io::Error> {
     let file_path = get_cached_file_path(year, day);
-    println!("getting cached file from {}", file_path.to_string_lossy());
     fs::read_to_string(file_path)
 }
 
