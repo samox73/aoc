@@ -1,7 +1,6 @@
 extern crate test;
+use nom::IResult;
 use std::collections::{BTreeMap, HashSet};
-
-use regex::Regex;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
@@ -44,6 +43,7 @@ struct CardStack {
     card_count: u32,
 }
 
+#[derive(Debug, PartialEq)]
 struct Card {
     id: u64,
     targets: HashSet<u64>,
@@ -54,7 +54,7 @@ fn get_map_of_winning_stacks(input: &str) -> BTreeMap<u64, CardStack> {
     input
         .lines()
         .map(|line| {
-            let card = parse_card(line);
+            let card = parse_card(line).unwrap().1;
             let matches_per_card = u64::try_from(get_card_matches_counct(&card)).unwrap();
             let stack = CardStack {
                 matches_per_card,
@@ -70,7 +70,7 @@ fn get_total_points(input: &str) -> u64 {
 }
 
 fn get_points_of_line(line: &str) -> u64 {
-    let card = parse_card(line);
+    let card = parse_card(line).unwrap().1;
     let matches_count = get_card_matches_counct(&card);
     if matches_count == 0 {
         return 0;
@@ -83,23 +83,21 @@ fn get_card_matches_counct(card: &Card) -> u32 {
     u32::try_from(winners.len()).unwrap()
 }
 
-fn parse_card(s: &str) -> Card {
-    let re = Regex::new(r"Card\s+(?<id>\d+):(?<winners>[\d\s]+)\|(?<numbers>[\d\s]+)").unwrap();
-    if let Some(c) = re.captures(s) {
-        let w = &c["winners"];
-        let n = &c["numbers"];
-        let id = c["id"].parse::<u64>().unwrap();
-        return Card {
-            id,
-            targets: get_int_vector(w),
+fn parse_card(s: &str) -> IResult<&str, Card> {
+    let (s, _) = nom::character::complete::alpha1(s)?;
+    let (s, _) = nom::character::complete::multispace1(s)?;
+    let (s, id) = nom::character::complete::u64(s)?;
+    let (s, _) = nom::character::complete::char(':')(s)?;
+    let (s, t) = nom::bytes::complete::take_until("|")(s)?;
+    let (n, _) = nom::character::complete::char('|')(s)?;
+    Ok((
+        s,
+        Card {
+            id: id,
+            targets: get_int_vector(t),
             numbers: get_int_vector(n),
-        };
-    }
-    Card {
-        id: 0,
-        targets: HashSet::new(),
-        numbers: HashSet::new(),
-    }
+        },
+    ))
 }
 
 fn get_int_vector(s: &str) -> HashSet<u64> {
