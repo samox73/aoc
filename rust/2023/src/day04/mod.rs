@@ -11,7 +11,6 @@ pub fn solve_a() {
 pub fn solve_b() {
     let input = aoc_utils::get_input(2023, 04);
     let mut map = get_map_of_winning_stacks(&input);
-    print_card_stacks(&map);
     process_card_stacks(&mut map);
     let solution: u32 = map.values().map(|v| v.card_count).sum();
     println!("{}", solution);
@@ -24,21 +23,9 @@ fn process_card_stacks(map: &mut BTreeMap<u64, CardStack>) {
         let matches = map.get(&id).unwrap().matches_per_card;
         for i in 0..u64::try_from(matches).unwrap() {
             let idx = (id + i + 1).clamp(0, len - 1);
-            let other: &mut CardStack = map.get_mut(&idx).unwrap();
-            other.card_count += count;
+            map.get_mut(&idx).unwrap().card_count += count;
         }
-        print_card_stacks(&map);
     }
-}
-
-fn print_card_stacks(map: &BTreeMap<u64, CardStack>) {
-    for (id, stack) in map {
-        println!(
-            "{}: CardStack(matches: {}, count: {})",
-            id, stack.matches_per_card, stack.card_count
-        );
-    }
-    println!();
 }
 
 struct CardStack {
@@ -46,7 +33,6 @@ struct CardStack {
     card_count: u32,
 }
 
-#[derive(Clone)]
 struct Card {
     id: u64,
     targets: HashSet<u64>,
@@ -58,13 +44,12 @@ fn get_map_of_winning_stacks(input: &str) -> BTreeMap<u64, CardStack> {
         .lines()
         .map(|line| {
             let card = parse_card(line);
-            (
-                card.id - 1,
-                CardStack {
-                    matches_per_card: u64::try_from(get_card_matches_counct(&card)).unwrap(),
-                    card_count: 1,
-                },
-            )
+            let matches_per_card = u64::try_from(get_card_matches_counct(&card)).unwrap();
+            let stack = CardStack {
+                matches_per_card,
+                card_count: 1,
+            };
+            (card.id - 1, stack)
         })
         .collect()
 }
