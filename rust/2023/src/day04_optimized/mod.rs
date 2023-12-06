@@ -55,7 +55,7 @@ fn get_map_of_winning_stacks(input: &str) -> BTreeMap<u32, CardStack> {
         .lines()
         .map(|line| {
             let card = parse_card(line).unwrap().1;
-            let matches_per_card = u32::try_from(get_card_matches_count(&card)).unwrap();
+            let matches_per_card = get_card_matches_count(&card);
             let stack = CardStack {
                 matches_per_card,
                 card_count: 1,
@@ -105,6 +105,7 @@ fn parse_card(s: &str) -> IResult<&str, Card> {
     ))
 }
 
+#[inline(always)]
 fn get_int_vector(s: &str, c: usize) -> IResult<&str, Vec<u32>> {
     let (s, v) = nom::multi::many_m_n(c, c, |s| -> IResult<&str, u32> {
         let (s, _) = nom::character::complete::multispace0(s)?;

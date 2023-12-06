@@ -11,15 +11,13 @@ pub fn bench_b(b: &mut test::Bencher) {
     let input = aoc_utils::get_input(2023, XX);
     b.iter(|| solve_b(&input));
 }
-pub fn solve_a() {
-    let input = aoc_utils::get_input(2023, XX);
+pub fn solve_a(input: &str) {
     println!("{}", input);
     let solution = do_something(input);
     println!("part a: {}", solution);
 }
 
-pub fn solve_b() {
-    let input = aoc_utils::get_input(2023, XX);
+pub fn solve_b(input: &str) {
     let solution = do_something_differently(input);
     println!("part b: {}", solution);
 }
