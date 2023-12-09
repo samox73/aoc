@@ -100,7 +100,7 @@ fn do_something_differently(input: &str) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::day09_normal::get_previous_value;
+    use crate::day09::get_previous_value;
 
     use super::{build_diffs, get_next_value};
 
