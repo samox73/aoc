@@ -1,9 +1,9 @@
 #![feature(test)]
 
-mod day09_lagrange;
+mod day10;
 
 fn main() {
-    let input = aoc_utils::get_input(2023, 09);
-    day09_lagrange::solve_a(&input);
-    day09_lagrange::solve_b(&input);
+    let input = aoc_utils::get_input(2023, 10);
+    day10::solve_a(&input);
+    day10::solve_b(&input);
 }
