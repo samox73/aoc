@@ -1,9 +1,10 @@
 #![feature(test)]
 
-mod day10;
+mod day11;
+mod utils;
 
 fn main() {
-    let input = aoc_utils::get_input(2023, 10);
-    day10::solve_a(&input);
-    day10::solve_b(&input);
+    let input = aoc_utils::get_input(2023, 11);
+    day11::solve_a(&input);
+    day11::solve_b(&input);
 }
