@@ -5,6 +5,8 @@ use std::{
     path::PathBuf,
 };
 
+pub mod coordinate;
+
 use reqwest::Error;
 
 pub fn get_input(year: i16, day: i8) -> String {

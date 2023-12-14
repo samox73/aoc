@@ -1,6 +1,5 @@
-use std::collections::{BTreeSet, HashSet};
-
-use crate::utils::coordinates::Coordinate;
+use aoc_utils::coordinate::Coordinate;
+use std::collections::BTreeSet;
 
 extern crate test;
 
@@ -110,27 +109,4 @@ fn expand_empty_columns_rows(mut galaxy: Galaxy, scale: isize) -> Galaxy {
             .for_each(|n| n.x += scale - 1);
     }
     galaxy
-
-    // let mut new_raw_galaxy: Vec<Vec<char>> = Vec::new();
-    // for row in &galaxy.raw_galaxy {
-    //     if row.iter().all_equal() {
-    //         new_raw_galaxy.push(row.clone());
-    //     }
-    //     new_raw_galaxy.push(row.clone());
-    // }
-    // // iterate inverse so that we don't have to account for changing char positions
-    // for i in (0..galaxy.raw_galaxy[0].len()).rev() {
-    //     let column: Vec<char> = galaxy
-    //         .raw_galaxy
-    //         .iter()
-    //         .map(|l| *l.get(i).unwrap())
-    //         .collect();
-    //     if column.iter().all_equal() {
-    //         for j in 0..new_raw_galaxy.len() {
-    //             new_raw_galaxy.get_mut(j).unwrap().insert(i, '.');
-    //         }
-    //     }
-    // }
-    // galaxy.raw_galaxy = new_raw_galaxy;
-    // galaxy
 }
