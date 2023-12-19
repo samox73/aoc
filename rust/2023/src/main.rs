@@ -1,9 +1,19 @@
 #![feature(test)]
 
-mod day15;
+mod day16;
 
 fn main() {
-    let input = aoc_utils::get_input(2023, 15);
-    day15::solve_a(&input);
-    day15::solve_b(&input);
+    let input = aoc_utils::get_input(2023, 16);
+    //     let input  = ".|...\\....
+    // |.-.\\.....
+    // .....|-...
+    // ........|.
+    // ..........
+    // .........\\
+    // ..../.\\\\..
+    // .-.-/..|..
+    // .|....-|.\\
+    // ..//.|....";
+    day16::solve_a(&input);
+    day16::solve_b(&input);
 }
