@@ -1,3 +1,6 @@
+use aoc_utils::coordinate::Coordinate;
+use nom::IResult;
+
 extern crate test;
 
 #[bench]
@@ -12,20 +15,88 @@ pub fn bench_b(b: &mut test::Bencher) {
     b.iter(|| solve_b(&input));
 }
 pub fn solve_a(input: &str) {
-    println!("{}", input);
-    let solution = do_something(input);
-    println!("part a: {}", solution);
+    let (vertices, perimeter) = parse_vertices(input, false);
+    let count = perimeter / 2 + shoelace(vertices) / 2 + 1;
+    println!("part a: {}", count);
 }
 
 pub fn solve_b(input: &str) {
-    let solution = do_something_differently(input);
-    println!("part b: {}", solution);
+    let (vertices, perimeter) = parse_vertices(input, true);
+    let count = perimeter / 2 + shoelace(vertices) / 2 + 1;
+    println!("part b: {}", count);
 }
 
-fn do_something(input: &str) -> u64 {
-    return 0;
+fn parse_direction(d: &str) -> (isize, isize) {
+    match d {
+        "R" | "0" => (1, 0),
+        "D" | "1" => (0, 1),
+        "L" | "2" => (-1, 0),
+        "U" | "3" => (0, -1),
+        _ => unreachable!(),
+    }
 }
 
-fn do_something_differently(input: &str) -> u64 {
-    return 0;
+fn parse_line(line: &str, part_b: bool) -> IResult<&str, ((isize, isize), u64)> {
+    let (line, dir) = nom::character::complete::alpha1(line)?;
+    let dir = parse_direction(dir);
+    let (line, _) = nom::character::complete::space1(line)?;
+    let (line, length) = nom::character::complete::u64(line)?;
+    let (line, _) = nom::character::complete::space1(line)?;
+    if !part_b {
+        return Ok((line, (dir, length)));
+    }
+    let color = line.trim_matches('(').trim_matches(')');
+    let length = u64::from_str_radix(&color[1..6], 16).unwrap();
+    let dir = parse_direction(&color[6..]);
+    return Ok((line, (dir, length)));
+}
+
+fn determinant(v1: Coordinate<isize>, v2: Coordinate<isize>) -> isize {
+    v1.x * v2.y - v1.y * v2.x
+}
+
+fn shoelace(data: Vec<Coordinate<isize>>) -> usize {
+    let mut area = 0;
+    for i in 0..data.len() {
+        let v1 = data.get(i).unwrap();
+        let v2 = data.get((i + 1) % data.len()).unwrap();
+        area += determinant(*v1, *v2);
+    }
+    area.abs() as usize
+}
+
+fn parse_vertices(input: &str, part_b: bool) -> (Vec<Coordinate<isize>>, usize) {
+    let mut data: Vec<Coordinate<isize>> = Vec::new();
+    let mut position: Coordinate<isize> = Coordinate::from((0, 0));
+    let mut perimeter: usize = 0;
+    for line in input.lines().into_iter() {
+        let (direction, length) = parse_line(line.trim(), part_b).unwrap().1;
+        for _ in 0..length {
+            perimeter += 1;
+            position += Coordinate::from(direction);
+            data.push(position.clone());
+        }
+    }
+    (data, perimeter)
+}
+
+#[cfg(test)]
+mod tests {
+    use aoc_utils::coordinate::Coordinate;
+
+    use super::shoelace;
+
+    #[test]
+    fn shoelace_works() {
+        // example from https://en.wikipedia.org/wiki/Shoelace_formula#Example
+        let vs = vec![
+            Coordinate::from((1, 6)),
+            Coordinate::from((3, 1)),
+            Coordinate::from((7, 2)),
+            Coordinate::from((4, 4)),
+            Coordinate::from((8, 5)),
+        ];
+        let res = shoelace(vs) as f64 / 2.;
+        assert_eq!(res, 16.5);
+    }
 }

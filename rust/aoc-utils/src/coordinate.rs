@@ -1,7 +1,7 @@
 use num_traits::Num;
 use std::fmt::{Debug, Display};
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Coordinate<T: Num> {
     pub x: T,
     pub y: T,
