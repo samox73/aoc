@@ -1,4 +1,5 @@
 use aoc_utils::coordinate::Coordinate;
+use pathfinding::{directed::dijkstra::dijkstra, matrix::Matrix};
 
 extern crate test;
 
@@ -14,148 +15,83 @@ pub fn bench_b(b: &mut test::Bencher) {
     b.iter(|| solve_b(&input));
 }
 pub fn solve_a(input: &str) {
-    let grid = &mut parse_grid(input);
-    find_cheapest_route(grid, grid.start, None, None, 1, 3, 0);
-    print_path(grid);
-    println!("part a: {}", grid.data.last().unwrap().last().unwrap().cost);
+    println!("part a: {}", find_shortest_path(input, 1, 3));
 }
 
 pub fn solve_b(input: &str) {
-    let solution = do_something_differently(input);
-    println!("part b: {}", solution);
+    println!("part b: {}", find_shortest_path(input, 4, 10));
 }
 
-fn print_path(grid: &mut Grid) {
-    let mut pos = grid.end;
-    println!("{}", pos);
-    while pos != grid.start {
-        pos = grid.get_mut(&pos).previous.unwrap();
-        println!("{}", pos);
-    }
+struct Board {
+    grid: Matrix<u64>,
+    max_step_size: usize,
+    min_step_size: usize,
+    end: (usize, usize),
 }
 
-struct Tile {
-    weight: usize,
-    visited: bool,
-    cost: usize,
-    previous: Option<Coordinate<isize>>,
-}
-
-struct Grid {
-    data: Vec<Vec<Tile>>,
-    start: Coordinate<isize>,
-    end: Coordinate<isize>,
-}
-
-impl Grid {
-    fn step_valid(&self, target: Coordinate<isize>) -> bool {
-        target.x >= 0
-            && target.y >= 0
-            && (target.x as usize) < self.data[0].len()
-            && (target.y as usize) < self.data.len()
+impl Board {
+    fn extend(
+        &self,
+        mut state: Vec<(((usize, usize), (isize, isize), usize), u64)>,
+        pos: (usize, usize),
+        direction: (isize, isize),
+        length: usize,
+    ) -> Vec<(((usize, usize), (isize, isize), usize), u64)> {
+        state.extend(
+            &self
+                .grid
+                .move_in_direction(pos, direction)
+                .map(|t| ((t, direction, length), self.grid[t])),
+        );
+        state
     }
 
-    fn get_mut(&mut self, coordinate: &Coordinate<isize>) -> &mut Tile {
-        self.data
-            .get_mut(coordinate.y as usize)
-            .unwrap()
-            .get_mut(coordinate.x as usize)
-            .unwrap()
-    }
-
-    fn get_weight(&mut self, coordinate: &Coordinate<isize>) -> usize {
-        self.data
-            .get(coordinate.y as usize)
-            .unwrap()
-            .get(coordinate.x as usize)
-            .unwrap()
-            .weight
-    }
-}
-
-const DIRECTIONS: [(isize, isize); 4] = [(1, 0), (-1, 0), (0, 1), (0, -1)];
-
-fn find_cheapest_route(
-    grid: &mut Grid,
-    position: Coordinate<isize>,
-    previous_position: Option<Coordinate<isize>>,
-    previous_dir: Option<Coordinate<isize>>,
-    min_step: isize,
-    max_step: isize,
-    mut cost: usize,
-) {
-    if position == grid.end {
-        println!();
-    }
-    let tile = grid.get_mut(&position);
-    if tile.cost < cost {
-        return;
-    }
-    cost += tile.weight;
-    if tile.cost > cost {
-        tile.cost = cost;
-        tile.previous = previous_position;
-    }
-    println!(
-        "tile: {}, weight: {}, cost: {}",
-        position, tile.weight, tile.cost
-    );
-    if position == grid.end {
-        return;
-    }
-
-    for dir in DIRECTIONS {
-        let dir = Coordinate::from(dir);
-        if let Some(prev_dir) = previous_dir {
-            if prev_dir == dir || prev_dir == dir * -1 {
-                continue;
+    fn successors(
+        &self,
+    ) -> impl Fn(
+        &((usize, usize), (isize, isize), usize),
+    ) -> Vec<(((usize, usize), (isize, isize), usize), u64)>
+           + '_ {
+        |&(pos, dir, length)| {
+            let mut next = Vec::with_capacity(3);
+            // if max step size is not reached we can continue in the current direction
+            if length < self.max_step_size {
+                next = self.extend(next, pos, dir, length + 1);
             }
-        }
-        for step_size in min_step..=max_step {
-            let step = dir * step_size;
-            let target = position + step;
-            if grid.step_valid(target) {
-                let mut intermediate_costs = 0;
-                for i in 1..step_size {
-                    intermediate_costs += grid.get_weight(&(position + dir * i));
-                }
-                find_cheapest_route(
-                    grid,
-                    target,
-                    Some(position),
-                    Some(dir),
-                    min_step,
-                    max_step,
-                    cost + intermediate_costs,
-                );
+            // turn left or right
+            if length >= self.min_step_size {
+                next = self.extend(next, pos, (-dir.1, -dir.0), 1);
+                next = self.extend(next, pos, (dir.1, dir.0), 1);
+            // at the start
+            } else if length == 0 {
+                next = self.extend(next, pos, (1, 0), 1);
+                next = self.extend(next, pos, (0, 1), 1);
             }
+            next
         }
+    }
+
+    fn success(&self) -> impl Fn(&((usize, usize), (isize, isize), usize)) -> bool + '_ {
+        |&(pos, _, length)| pos == self.end && length >= self.min_step_size
     }
 }
 
-fn parse_grid(input: &str) -> Grid {
-    let mut data: Vec<Vec<Tile>> = Vec::new();
-    for line in input.lines() {
-        let mut row: Vec<Tile> = Vec::new();
-        for char in line.trim().chars() {
-            row.push(Tile {
-                weight: char.to_digit(10).unwrap() as usize,
-                visited: false,
-                cost: usize::MAX,
-                previous: None,
-            })
-        }
-        data.push(row);
-    }
-    let x = (data[0].len() - 1) as isize;
-    let y = (data.len() - 1) as isize;
-    Grid {
-        data,
-        start: Coordinate { x: 0, y: 0 },
-        end: Coordinate { x, y },
-    }
-}
+fn find_shortest_path(input: &str, min_step_size: usize, max_step_size: usize) -> u64 {
+    let rows = input
+        .lines()
+        .map(|l| l.trim().chars().map(|c| c.to_digit(10).unwrap() as u64));
+    let grid = Matrix::from_rows(rows).unwrap();
+    let end = (grid.rows - 1, grid.columns - 1);
+    let board = Board {
+        grid,
+        min_step_size,
+        max_step_size,
+        end,
+    };
 
-fn do_something_differently(input: &str) -> usize {
-    return 0;
+    let result = dijkstra(&((0, 0), (0, 0), 0), board.successors(), board.success()).unwrap();
+    // for c in result.0 {
+    //     println!("[{}, {}] [{}, {}], {}", c.0 .0, c.0 .1, c.1 .0, c.1 .1, c.2);
+    // }
+    result.1
 }
