@@ -1,10 +1,16 @@
 use num_traits::Num;
-use std::fmt::{Display, Debug};
+use std::fmt::{Debug, Display};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Coordinate<T: Num> {
     pub x: T,
     pub y: T,
+}
+
+impl<T: Num + Copy> Coordinate<T> {
+    fn raw(&self) -> (T, T) {
+        (self.x, self.y)
+    }
 }
 
 impl<T: Num> std::ops::Add<Coordinate<T>> for Coordinate<T> {
@@ -13,6 +19,16 @@ impl<T: Num> std::ops::Add<Coordinate<T>> for Coordinate<T> {
         Coordinate::<T> {
             x: self.x + other.x,
             y: self.y + other.y,
+        }
+    }
+}
+
+impl<T: Num + Copy> std::ops::Mul<T> for Coordinate<T> {
+    type Output = Coordinate<T>;
+    fn mul(self, other: T) -> Coordinate<T> {
+        Coordinate::<T> {
+            x: self.x * other,
+            y: self.y * other,
         }
     }
 }
