@@ -8,7 +8,7 @@ pub struct Coordinate<T: Num> {
 }
 
 impl<T: Num + Copy> Coordinate<T> {
-    fn raw(&self) -> (T, T) {
+    pub fn raw(&self) -> (T, T) {
         (self.x, self.y)
     }
 }
