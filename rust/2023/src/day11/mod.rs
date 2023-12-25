@@ -1,4 +1,4 @@
-use aoc_utils::coordinate::Coordinate;
+use aoc_utils::Vec2::Vec2;
 use std::collections::BTreeSet;
 
 extern crate test;
@@ -30,7 +30,7 @@ pub fn solve_b(input: &str) {
 
 struct Galaxy {
     raw_galaxy: Vec<Vec<char>>,
-    nodes: Vec<Coordinate>,
+    nodes: Vec<Vec2>,
 }
 
 impl std::fmt::Display for Galaxy {
@@ -59,7 +59,7 @@ fn parse_nodes(mut galaxy: Galaxy) -> Galaxy {
     for (y, row) in galaxy.raw_galaxy.iter().enumerate() {
         for (x, &node) in row.iter().enumerate() {
             if node == '#' {
-                galaxy.nodes.push(Coordinate {
+                galaxy.nodes.push(Vec2 {
                     x: x as isize,
                     y: y as isize,
                 });

@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use aoc_utils::coordinate::Coordinate;
+use aoc_utils::Vec2::Vec2;
 
 extern crate test;
 
@@ -18,8 +18,8 @@ pub fn bench_b(b: &mut test::Bencher) {
 
 pub fn solve_a(input: &str) {
     let beam = Beam {
-        pos: Coordinate { x: 0, y: 0 },
-        dir: Coordinate { x: 1, y: 0 },
+        pos: Vec2 { x: 0, y: 0 },
+        dir: Vec2 { x: 1, y: 0 },
     };
     let floor = &mut parse_floor(input);
     follow_beam(floor, beam);
@@ -38,11 +38,11 @@ pub fn solve_b(input: &str) {
     for x in 0..original_floor.grid[0].len() {
         let floor = &mut original_floor.clone();
         let beam = Beam {
-            pos: Coordinate {
+            pos: Vec2 {
                 x: x as isize,
                 y: 0,
             },
-            dir: Coordinate { x: 0, y: 1 },
+            dir: Vec2 { x: 0, y: 1 },
         };
         follow_beam(floor, beam);
         let count: usize = floor.count_lit();
@@ -50,11 +50,11 @@ pub fn solve_b(input: &str) {
 
         let floor = &mut original_floor.clone();
         let beam = Beam {
-            pos: Coordinate {
+            pos: Vec2 {
                 x: x as isize,
                 y: original_floor.grid.len() as isize - 1,
             },
-            dir: Coordinate { x: 0, y: -1 },
+            dir: Vec2 { x: 0, y: -1 },
         };
         follow_beam(floor, beam);
         let count: usize = floor.count_lit();
@@ -63,11 +63,11 @@ pub fn solve_b(input: &str) {
     for y in 0..original_floor.grid.len() {
         let floor = &mut original_floor.clone();
         let beam = Beam {
-            pos: Coordinate {
+            pos: Vec2 {
                 x: 0,
                 y: y as isize,
             },
-            dir: Coordinate { x: 1, y: 0 },
+            dir: Vec2 { x: 1, y: 0 },
         };
         follow_beam(floor, beam);
         let count: usize = floor.count_lit();
@@ -75,11 +75,11 @@ pub fn solve_b(input: &str) {
 
         let floor = &mut original_floor.clone();
         let beam = Beam {
-            pos: Coordinate {
+            pos: Vec2 {
                 x: original_floor.grid[0].len() as isize - 1,
                 y: y as isize,
             },
-            dir: Coordinate { x: -1, y: 0 },
+            dir: Vec2 { x: -1, y: 0 },
         };
         follow_beam(floor, beam);
         let count: usize = floor.count_lit();
@@ -108,7 +108,7 @@ fn parse_floor(input: &str) -> Floor {
 struct Tile {
     variant: char,
     lit: bool,
-    beams: Vec<Coordinate<isize>>,
+    beams: Vec<Vec2<isize>>,
 }
 
 #[derive(Clone)]
@@ -117,11 +117,11 @@ struct Floor {
 }
 
 impl Floor {
-    fn get_mut(&mut self, coordinate: &Coordinate<isize>) -> &mut Tile {
+    fn get_mut(&mut self, Vec2: &Vec2<isize>) -> &mut Tile {
         self.grid
-            .get_mut(coordinate.y as usize)
+            .get_mut(Vec2.y as usize)
             .unwrap()
-            .get_mut(coordinate.x as usize)
+            .get_mut(Vec2.x as usize)
             .unwrap()
     }
 
@@ -161,8 +161,8 @@ impl Display for Floor {
 
 #[derive(Clone)]
 struct Beam {
-    pos: Coordinate<isize>,
-    dir: Coordinate<isize>,
+    pos: Vec2<isize>,
+    dir: Vec2<isize>,
 }
 
 fn beam_continues(tile: &Tile, beam: &Beam) -> bool {
@@ -206,29 +206,29 @@ fn follow_beam(floor: &mut Floor, mut beam: Beam) {
     tile.lit = true;
     match tile.variant {
         '/' => {
-            beam.dir = Coordinate::from((-beam.dir.y, -beam.dir.x));
+            beam.dir = Vec2::from((-beam.dir.y, -beam.dir.x));
             beam.pos += beam.dir;
             follow_beam(floor, beam);
         }
         '\\' => {
-            beam.dir = Coordinate::from((beam.dir.y, beam.dir.x));
+            beam.dir = Vec2::from((beam.dir.y, beam.dir.x));
             beam.pos += beam.dir;
             follow_beam(floor, beam);
         }
         '-' => {
             let mut east = beam.clone();
             let mut west = beam.clone();
-            east.dir = Coordinate::from((1, 0));
+            east.dir = Vec2::from((1, 0));
             follow_beam(floor, east);
-            west.dir = Coordinate::from((-1, 0));
+            west.dir = Vec2::from((-1, 0));
             follow_beam(floor, west);
         }
         '|' => {
             let mut north = beam.clone();
             let mut south = beam.clone();
-            north.dir = Coordinate::from((0, -1));
+            north.dir = Vec2::from((0, -1));
             follow_beam(floor, north);
-            south.dir = Coordinate::from((0, 1));
+            south.dir = Vec2::from((0, 1));
             follow_beam(floor, south);
         }
         _ => unreachable!(),

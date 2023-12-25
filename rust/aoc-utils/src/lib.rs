@@ -5,7 +5,8 @@ use std::{
     path::PathBuf,
 };
 
-pub mod coordinate;
+pub mod vec2;
+pub mod vec3;
 
 use reqwest::Error;
 

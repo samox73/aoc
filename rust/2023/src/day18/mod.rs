@@ -1,4 +1,4 @@
-use aoc_utils::coordinate::Coordinate;
+use aoc_utils::Vec2::Vec2;
 use nom::IResult;
 
 extern crate test;
@@ -51,11 +51,11 @@ fn parse_line(line: &str, part_b: bool) -> IResult<&str, ((isize, isize), u64)> 
     return Ok((line, (dir, length)));
 }
 
-fn determinant(v1: Coordinate<isize>, v2: Coordinate<isize>) -> isize {
+fn determinant(v1: Vec2<isize>, v2: Vec2<isize>) -> isize {
     v1.x * v2.y - v1.y * v2.x
 }
 
-fn shoelace(data: Vec<Coordinate<isize>>) -> usize {
+fn shoelace(data: Vec<Vec2<isize>>) -> usize {
     let mut area = 0;
     for i in 0..data.len() {
         let v1 = data.get(i).unwrap();
@@ -65,15 +65,15 @@ fn shoelace(data: Vec<Coordinate<isize>>) -> usize {
     area.abs() as usize
 }
 
-fn parse_vertices(input: &str, part_b: bool) -> (Vec<Coordinate<isize>>, usize) {
-    let mut data: Vec<Coordinate<isize>> = Vec::new();
-    let mut position: Coordinate<isize> = Coordinate::from((0, 0));
+fn parse_vertices(input: &str, part_b: bool) -> (Vec<Vec2<isize>>, usize) {
+    let mut data: Vec<Vec2<isize>> = Vec::new();
+    let mut position: Vec2<isize> = Vec2::from((0, 0));
     let mut perimeter: usize = 0;
     for line in input.lines().into_iter() {
         let (direction, length) = parse_line(line.trim(), part_b).unwrap().1;
         for _ in 0..length {
             perimeter += 1;
-            position += Coordinate::from(direction);
+            position += Vec2::from(direction);
             data.push(position.clone());
         }
     }
@@ -82,7 +82,7 @@ fn parse_vertices(input: &str, part_b: bool) -> (Vec<Coordinate<isize>>, usize) 
 
 #[cfg(test)]
 mod tests {
-    use aoc_utils::coordinate::Coordinate;
+    use aoc_utils::Vec2::Vec2;
 
     use super::shoelace;
 
@@ -90,11 +90,11 @@ mod tests {
     fn shoelace_works() {
         // example from https://en.wikipedia.org/wiki/Shoelace_formula#Example
         let vs = vec![
-            Coordinate::from((1, 6)),
-            Coordinate::from((3, 1)),
-            Coordinate::from((7, 2)),
-            Coordinate::from((4, 4)),
-            Coordinate::from((8, 5)),
+            Vec2::from((1, 6)),
+            Vec2::from((3, 1)),
+            Vec2::from((7, 2)),
+            Vec2::from((4, 4)),
+            Vec2::from((8, 5)),
         ];
         let res = shoelace(vs) as f64 / 2.;
         assert_eq!(res, 16.5);

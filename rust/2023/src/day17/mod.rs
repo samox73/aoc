@@ -1,4 +1,4 @@
-use aoc_utils::coordinate::Coordinate;
+use aoc_utils::Vec2::Vec2;
 use pathfinding::{directed::dijkstra::dijkstra, matrix::Matrix};
 
 extern crate test;
