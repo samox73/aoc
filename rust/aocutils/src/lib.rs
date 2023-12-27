@@ -5,6 +5,7 @@ use std::{
     path::PathBuf,
 };
 
+pub mod grid;
 pub mod vec2;
 pub mod vec3;
 

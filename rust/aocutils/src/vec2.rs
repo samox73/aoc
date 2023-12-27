@@ -1,7 +1,7 @@
 use num_traits::Num;
 use std::fmt::{Debug, Display};
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Debug)]
 pub struct Vec2<T: Num> {
     pub x: T,
     pub y: T,

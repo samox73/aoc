@@ -4,7 +4,8 @@ use aocutils::{
     grid::{Grid, Vertexable},
     vec2::Vec2,
 };
-use pathfinding::directed::dfs::dfs_reach;
+use itertools::Itertools;
+use pathfinding::directed::{dfs::dfs_reach, dijkstra::dijkstra_all};
 
 extern crate test;
 
@@ -30,6 +31,24 @@ impl Vertexable for Vertex {
     }
 }
 
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Debug)]
+struct State {
+    coords: Vec2<isize>,
+    visited: Vec<Vec2<isize>>,
+}
+
+impl State {
+    fn from(coords: Vec2<isize>, visited: Vec<Vec2<isize>>) -> State {
+        State { coords, visited }
+    }
+}
+
+impl Display for State {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[coords: {}, visited: {:?}]", self.coords, self.visited)
+    }
+}
+
 fn get_grid(input: &str) -> Grid {
     let lines: Vec<Vec<char>> = input
         .split_whitespace()
@@ -46,7 +65,7 @@ fn get_grid(input: &str) -> Grid {
     grid
 }
 
-fn get_start(input: &str) -> Vec2<isize> {
+fn get_start(input: &str) -> State {
     let x = input
         .lines()
         .next()
@@ -55,67 +74,50 @@ fn get_start(input: &str) -> Vec2<isize> {
         .unwrap()
         .0
         .len();
-    Vec2::from((x as isize, 0))
-}
-
-pub fn dfs<N, FN, IN>(start: N, successors: FN) -> Vec<Vec2<isize>>
-where
-    FN: FnMut(N) -> IN,
-    IN: IntoIterator<Item = N>,
-{
-    let v = Vec::new();
-    v
+    let current: Vec2<isize> = Vec2::from((x as isize, 0));
+    State {
+        coords: current,
+        visited: Vec::new(),
+    }
 }
 
 pub fn solve_a(input: &str) -> u64 {
     let grid = get_grid(input);
     let start = get_start(input);
-    let s = dfs(start, |state| {
-        let mut next: Vec<Vec2<isize>> = Vec::new();
-        let steps: [(isize, isize); 4] = [(0, 1), (0, -1), (1, 0), (-1, 0)];
-        for step in steps {
-            let proposed = state + Vec2::from(step);
-            if !grid.is_inside(&proposed.raw()) {
+    let s = dfs_reach(start, |state| {
+        let mut next: Vec<State> = Vec::new();
+        println!("{}", state.visited.len());
+        for step in [(0, 1), (0, -1), (1, 0), (-1, 0)] {
+            let proposed = state.coords + Vec2::from(step);
+            let mut visited = state.visited.clone();
+            visited.push(state.coords);
+            if !grid.is_inside(&proposed.raw()) || visited.contains(&proposed) {
                 continue;
             }
             if let Some(v) = grid.get(&proposed.raw()) {
                 match (v.get_value(), step) {
-                    ('.', _) => next.push(proposed),
-                    ('>', (1, 0)) => next.push(proposed),
-                    ('v', (0, 1)) => next.push(proposed),
-                    ('<', (-1, 0)) => next.push(proposed),
-                    ('^', (0, -1)) => next.push(proposed),
+                    ('.', _) => next.push(State::from(proposed, visited)),
+                    ('>', (1, 0)) => next.push(State::from(proposed, visited)),
+                    ('v', (0, 1)) => next.push(State::from(proposed, visited)),
+                    ('<', (-1, 0)) => next.push(State::from(proposed, visited)),
+                    ('^', (0, -1)) => next.push(State::from(proposed, visited)),
                     _ => continue,
                 }
             }
         }
         next
-    });
-    println!("done");
-    let longest = s
+    })
+    .collect_vec();
+    println!("dfs done");
+    let longest: State = s
         .into_iter()
         .filter(|s| s.coords.y == grid.height - 1)
-        .next()
-        // .max_by(|a, b| a.visited.len().cmp(&b.visited.len()))
+        .max_by(|a, b| a.visited.len().cmp(&b.visited.len()))
         .unwrap();
+    println!("dfs done");
     println!("{longest}");
 
-    // for y in 0..grid.height {
-    //     for x in 0..grid.width {
-    //         if let Some(v) = grid.get(&(x, y)) {
-    //             if longest.visited.contains(&Vec2::from((x, y))) {
-    //                 print!("O");
-    //             } else {
-    //                 print!("{}", v.get_value());
-    //             }
-    //         } else {
-    //             print!("#",);
-    //         }
-    //     }
-    //     println!();
-    // }
-
-    let solution = 0;
+    let solution = longest.visited.len() as u64;
     println!("part a: {}", solution);
     solution
 }
