@@ -4,13 +4,13 @@ use std::collections::BTreeMap;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 04);
+    let input = aocutils::get_input(2023, 04);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 04);
+    let input = aocutils::get_input(2023, 04);
     b.iter(|| solve_b(&input));
 }
 

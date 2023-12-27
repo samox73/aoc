@@ -10,13 +10,13 @@ extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 20);
+    let input = aocutils::get_input(2023, 20);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 20);
+    let input = aocutils::get_input(2023, 20);
     b.iter(|| solve_b(&input));
 }
 

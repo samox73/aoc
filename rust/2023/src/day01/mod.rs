@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
 pub fn solve_a() {
-    let input = aoc_utils::get_input(2023, 1);
+    let input = aocutils::get_input(2023, 1);
     let numbers = extract_numbers(input);
     let sum: u32 = numbers.iter().sum();
     println!("{}", sum);
 }
 
 pub fn solve_b() {
-    let input = aoc_utils::get_input(2023, 1);
+    let input = aocutils::get_input(2023, 1);
     let numbers = extract_real_numbers(input);
     let sum: u32 = numbers.iter().sum();
     println!("{}", sum);

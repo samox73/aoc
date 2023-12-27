@@ -1,14 +1,14 @@
 use regex::{Captures, Regex};
 
 pub fn solve_a() {
-    let input = aoc_utils::get_input(2023, 02);
+    let input = aocutils::get_input(2023, 02);
     let ids = get_ids_of_valid_games(&input);
     let sum: u32 = ids.iter().sum();
     println!("part a: {}", sum);
 }
 
 pub fn solve_b() {
-    let input = aoc_utils::get_input(2023, 02);
+    let input = aocutils::get_input(2023, 02);
     let ids = get_sum_of_power_of_games(&input);
     let sum: u32 = ids.iter().sum();
     println!("part b: {}", sum);

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-aoc-utils = { version = "0.1.0", path = "../aoc-utils" }
+aocutils = { version = "0.1.0", path = "../aocutils" }
 btree-range-map = "0.7.2"
 console = "0.15.7"
 intervaltree = "0.2.7"

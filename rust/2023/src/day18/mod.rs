@@ -1,17 +1,17 @@
-use aoc_utils::Vec2::Vec2;
+use aocutils::Vec2::Vec2;
 use nom::IResult;
 
 extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 18);
+    let input = aocutils::get_input(2023, 18);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 18);
+    let input = aocutils::get_input(2023, 18);
     b.iter(|| solve_b(&input));
 }
 pub fn solve_a(input: &str) {
@@ -82,7 +82,7 @@ fn parse_vertices(input: &str, part_b: bool) -> (Vec<Vec2<isize>>, usize) {
 
 #[cfg(test)]
 mod tests {
-    use aoc_utils::Vec2::Vec2;
+    use aocutils::Vec2::Vec2;
 
     use super::shoelace;
 

@@ -1,7 +1,7 @@
 use regex::Regex;
 
 pub fn solve_a() {
-    let input = aoc_utils::get_input(2023, 03);
+    let input = aocutils::get_input(2023, 03);
     let parts = parse_parts(&input);
     let symbols = parse_symbols(&input);
     let sum: u64 = parts
@@ -13,7 +13,7 @@ pub fn solve_a() {
 }
 
 pub fn solve_b() {
-    let input = aoc_utils::get_input(2023, 03);
+    let input = aocutils::get_input(2023, 03);
     let parts = parse_parts(&input);
     let mut potential_gears = parse_symbols(&input);
     potential_gears.retain(|s| s.value == '*');

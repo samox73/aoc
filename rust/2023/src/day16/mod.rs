@@ -1,18 +1,18 @@
 use std::fmt::Display;
 
-use aoc_utils::Vec2::Vec2;
+use aocutils::Vec2::Vec2;
 
 extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 16);
+    let input = aocutils::get_input(2023, 16);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 16);
+    let input = aocutils::get_input(2023, 16);
     b.iter(|| solve_b(&input));
 }
 

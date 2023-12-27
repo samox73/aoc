@@ -5,7 +5,7 @@ use rand::seq::SliceRandom;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = aoc_utils::get_input(2023, 10);
+    let input = aocutils::get_input(2023, 10);
     b.iter(|| solve(&input));
 }
 
