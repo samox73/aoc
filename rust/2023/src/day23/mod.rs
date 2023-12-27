@@ -86,7 +86,6 @@ pub fn solve_a(input: &str) -> u64 {
     let start = get_start(input);
     let s = dfs_reach(start, |state| {
         let mut next: Vec<State> = Vec::new();
-        println!("{}", state.visited.len());
         for step in [(0, 1), (0, -1), (1, 0), (-1, 0)] {
             let proposed = state.coords + Vec2::from(step);
             let mut visited = state.visited.clone();
@@ -108,7 +107,6 @@ pub fn solve_a(input: &str) -> u64 {
         next
     })
     .collect_vec();
-    println!("dfs done");
     let longest: State = s
         .into_iter()
         .filter(|s| s.coords.y == grid.height - 1)
