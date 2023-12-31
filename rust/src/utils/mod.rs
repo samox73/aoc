@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 pub mod grid;
 pub mod input;
 pub mod vec2;

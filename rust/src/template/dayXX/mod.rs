@@ -19,15 +19,12 @@ pub fn solve(input: &str) {
 }
 
 fn solve_a(input: &str) -> u64 {
-    println!("{}", input);
     let solution = 0;
-    println!("part a: {}", solution);
     solution
 }
 
 #[allow(dead_code)]
 fn solve_b(input: &str) -> u64 {
     let solution = 0;
-    println!("part b: {}", solution);
     solution
 }

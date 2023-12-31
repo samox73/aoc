@@ -12,7 +12,8 @@ year="year$2"
 cd $script_dir/src
 rm -rf "$year/$day"
 mkdir -p "$year" .
-cp -r "./template/dayXX" $year
+cp -r "./template/dayXX" $year/$day
 cp "./template/main.rs" .
+echo "pub mod $day;" >> $year/mod.rs
 find -name "*.rs" -not -path "./template/**" -print0 | xargs -0 sed -i 's/DD/'"$1"'/g'
 find -name "*.rs" -not -path "./template/**" -print0 | xargs -0 sed -i 's/YYYY/'"$2"'/g'
