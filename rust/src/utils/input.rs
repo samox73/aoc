@@ -39,24 +39,34 @@ fn cache_input(input: &String, year: i16, day: i8) {
     };
 }
 
-fn get_aoc_path() -> PathBuf {
+fn get_cache_dir() -> PathBuf {
     dirs::home_dir()
         .expect("could not get home dir")
-        .join(".config/aoc/")
+        .join(".cache/aoc/")
 }
 
-fn get_cache_dir_path() -> PathBuf {
-    get_aoc_path().join("cache")
+fn get_inputs_dir() -> PathBuf {
+    get_cache_dir().join("inputs")
 }
 
 fn get_sessionid_file_path() -> PathBuf {
-    get_aoc_path().join("sessionid")
+    get_cache_dir().join("sessionid")
 }
 
 fn get_sessionid() -> String {
     let path = get_sessionid_file_path();
-    let id = fs::read_to_string(path).expect("could not read sessionid file");
-    id.trim().to_owned()
+    let id = fs::read_to_string(&path);
+    if id.is_err() {
+        print!("please provide your session cookie (value of the header 'Cookie'): ");
+        io::stdout().flush().unwrap();
+        let mut line = String::new();
+        let _ = std::io::stdin().read_line(&mut line).unwrap();
+        fs::create_dir_all(get_cache_dir()).unwrap();
+        fs::write(path, &line).expect("unable to write session cookie to file file");
+        println!("session cookie successfully saved to file");
+        return line;
+    }
+    id.unwrap().trim().to_owned()
 }
 
 fn get_content(url: &String, cookie: &String) -> Result<String, Error> {
@@ -69,7 +79,7 @@ fn get_content(url: &String, cookie: &String) -> Result<String, Error> {
 }
 
 fn get_cache_year_path(year: i16) -> PathBuf {
-    get_cache_dir_path().join(year.to_string())
+    get_inputs_dir().join(year.to_string())
 }
 
 fn get_cached_file_path(year: i16, day: i8) -> PathBuf {
