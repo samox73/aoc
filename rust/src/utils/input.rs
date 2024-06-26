@@ -1,7 +1,6 @@
 use std::{
     fs::{self, File},
     io::{self, Write},
-    ops::Add,
     path::PathBuf,
 };
 
@@ -14,7 +13,7 @@ pub fn get(year: i16, day: i8) -> String {
         Err(_) => {
             println!("could not find cached file, downloading...");
             let url = format!("https://adventofcode.com/{}/day/{}/input", year, day);
-            let cookie = "session=".to_owned().add(&get_sessionid());
+            let cookie = get_sessionid();
             let input = get_content(&url, &cookie).expect("msg");
             cache_input(&input, year, day);
             input
