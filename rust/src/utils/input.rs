@@ -24,6 +24,7 @@ pub fn get(year: i16, day: i8) -> String {
 fn cache_input(input: &String, year: i16, day: i8) {
     let file_path = get_cached_file_path(year, day);
     println!("caching input to {}", file_path.to_string_lossy());
+    fs::create_dir_all(get_cache_year_path(year)).expect("could not create directories");
     let file = File::create(file_path.clone());
     match file {
         Ok(mut f) => {
@@ -32,8 +33,6 @@ fn cache_input(input: &String, year: i16, day: i8) {
         }
         Err(e) => {
             eprintln!("encountered an error: {}", e);
-            fs::create_dir_all(get_cache_year_path(year)).expect("could not create directories");
-            cache_input(input, year, day);
         }
     };
 }

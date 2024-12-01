@@ -2,13 +2,13 @@ extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2023, 01);
+    let input = crate::utils::input::get(YYYY, DD);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2023, 01);
+    let input = crate::utils::input::get(YYYY, DD);
     b.iter(|| solve_b(&input));
 }
 
