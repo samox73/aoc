@@ -20,6 +20,7 @@ pub fn solve(input: &str) {
 
 fn solve_a(input: &str) -> u64 {
     let solution = 0;
+    println!("{}", input);
     solution
 }
 

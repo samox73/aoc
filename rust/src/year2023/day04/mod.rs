@@ -1,7 +1,7 @@
 extern crate test;
-use std::collections::{BTreeMap, HashSet};
 
 use regex::Regex;
+use std::collections::{BTreeMap, HashSet};
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
