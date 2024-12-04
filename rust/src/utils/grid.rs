@@ -47,6 +47,13 @@ impl Grid {
 
         self.vertices.get(location)
     }
+
+    pub fn get_value(&self, location: &(isize, isize)) -> Option<char> {
+        match self.get(location) {
+            Some(x) => Some(x.get_value()),
+            None => None,
+        }
+    }
 }
 
 impl Debug for Grid {
