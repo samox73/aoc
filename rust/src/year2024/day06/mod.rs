@@ -1,5 +1,3 @@
-use num_traits::Num;
-
 use crate::utils::{
     grid::{Grid, Vertexable},
     vec2::Vec2,
@@ -52,9 +50,6 @@ impl Vec2<isize> {
     fn rotate_cw(&self) -> Vec2<isize> {
         (-self.y, self.x).into()
     }
-    fn rotate_ccw(&self) -> Vec2<isize> {
-        (self.y, -self.x).into()
-    }
 }
 
 impl Walker {
@@ -77,18 +72,16 @@ impl Walker {
 struct WalkerGrid {
     pub grid: Grid,
     pub visited: HashSet<Vec2<isize>>,
-    pub obstruction_hits: HashMap<Vec2<isize>, HashSet<Vec2<isize>>>,
     pub obstacle_locations: HashSet<Vec2<isize>>,
 }
 
+#[allow(dead_code)]
 impl WalkerGrid {
     fn new(width: isize, height: isize, walker_pos: Option<(isize, isize)>) -> WalkerGrid {
         let grid = Grid::new(width, height);
-        let p = if let Some(w) = walker_pos { w } else { (0, 0) };
         let wg = WalkerGrid {
             grid,
             visited: HashSet::new(),
-            obstruction_hits: HashMap::new(),
             obstacle_locations: HashSet::new(),
         };
         wg
