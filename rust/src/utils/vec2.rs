@@ -23,6 +23,16 @@ impl<T: Num> std::ops::Add<Vec2<T>> for Vec2<T> {
     }
 }
 
+impl<T: Num> std::ops::Sub<Vec2<T>> for Vec2<T> {
+    type Output = Vec2<T>;
+    fn sub(self, other: Vec2<T>) -> Vec2<T> {
+        Vec2::<T> {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
 impl<T: Num + Copy> std::ops::Mul<T> for Vec2<T> {
     type Output = Vec2<T>;
     fn mul(self, other: T) -> Vec2<T> {
