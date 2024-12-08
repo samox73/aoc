@@ -2,6 +2,7 @@ use std::{collections::HashMap, fmt::Debug};
 
 pub trait Vertexable {
     fn get_value(&self) -> char;
+    fn set_value(&mut self, c: char);
 }
 
 pub struct Grid {
@@ -21,7 +22,7 @@ impl Grid {
     }
 
     pub fn is_inside(&self, location: &(isize, isize)) -> bool {
-        location.0 < self.width && location.1 < self.height
+        location.0 < self.width && location.1 < self.height && location.0 >= 0 && location.1 >= 0
     }
 
     pub fn add_vertex(&mut self, location: (isize, isize), vertex: Box<dyn Vertexable>) {
@@ -46,6 +47,18 @@ impl Grid {
         }
 
         self.vertices.get(location)
+    }
+
+    pub fn get_mut(&mut self, location: &(isize, isize)) -> Option<&mut Box<dyn Vertexable>> {
+        if !self.is_inside(location) {
+            println!(
+                "Warning: location ({},{}) is outside of grid with size ({},{})",
+                location.0, location.1, self.width, self.height
+            );
+            return None;
+        }
+
+        self.vertices.get_mut(location)
     }
 
     pub fn get_value(&self, location: &(isize, isize)) -> Option<char> {

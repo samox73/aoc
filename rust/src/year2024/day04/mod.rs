@@ -30,6 +30,9 @@ impl Vertexable for Vertex {
     fn get_value(&self) -> char {
         self.value
     }
+    fn set_value(&mut self, c: char) {
+        self.value = c;
+    }
 }
 
 fn get_grid(input: &str) -> Grid {
