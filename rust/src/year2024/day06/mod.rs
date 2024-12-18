@@ -11,13 +11,13 @@ extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2024, 06);
+    let input = crate::utils::input::get(2024, 6);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2024, 06);
+    let input = crate::utils::input::get(2024, 6);
     b.iter(|| solve_b(&input));
 }
 
@@ -77,14 +77,13 @@ struct WalkerGrid {
 
 #[allow(dead_code)]
 impl WalkerGrid {
-    fn new(width: isize, height: isize, walker_pos: Option<(isize, isize)>) -> WalkerGrid {
+    fn new(width: isize, height: isize) -> WalkerGrid {
         let grid = Grid::new(width, height);
-        let wg = WalkerGrid {
+        WalkerGrid {
             grid,
             visited: HashSet::new(),
             obstacle_locations: HashSet::new(),
-        };
-        wg
+        }
     }
 
     fn walk_a(&mut self, mut walker: Walker) {
@@ -165,7 +164,7 @@ impl WalkerGrid {
 fn parse_grid(input: &str) -> (WalkerGrid, Walker) {
     let width = input.lines().next().unwrap().len();
     let height = input.lines().count();
-    let mut wg = WalkerGrid::new(width as isize, height as isize, None);
+    let mut wg = WalkerGrid::new(width as isize, height as isize);
     let mut w = Walker::new((0, 0));
     for (y, line) in input.lines().enumerate() {
         for (x, c) in line.chars().enumerate() {

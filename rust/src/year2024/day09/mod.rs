@@ -1,17 +1,16 @@
 use itertools::Itertools;
-use num::iter::Range;
 
 extern crate test;
 
 #[bench]
 pub fn bench_a(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2024, 09);
+    let input = crate::utils::input::get(2024, 9);
     b.iter(|| solve_a(&input));
 }
 
 #[bench]
 pub fn bench_b(b: &mut test::Bencher) {
-    let input = crate::utils::input::get(2024, 09);
+    let input = crate::utils::input::get(2024, 9);
     b.iter(|| solve_b(&input));
 }
 
@@ -21,17 +20,16 @@ pub fn solve(input: &str) {
     println!("part b: {}", solve_b(input));
 }
 
-fn get_last_file_index(disk: &Vec<i64>) -> usize {
+fn get_last_file_index(disk: &[i64]) -> usize {
     for i in (0..disk.len()).rev() {
         if *disk.get(i).unwrap() != -1 {
             return i;
         }
     }
-    return 0;
+    0
 }
 
 fn solve_a(input: &str) -> u64 {
-    let input = "2333133121414131402";
     let disks_map = input.trim().chars().collect_vec();
     let mut disk = Vec::new();
     let mut file = true;
@@ -51,7 +49,7 @@ fn solve_a(input: &str) -> u64 {
         file = !file;
     }
 
-    let l = (&disk).len();
+    let l = disk.len();
     for i in 0..l {
         if disk[i] == -1 {
             let j = get_last_file_index(&disk);
@@ -60,14 +58,12 @@ fn solve_a(input: &str) -> u64 {
             }
         }
     }
-    let s: String = disk.iter().map(|i| i.to_string()).collect();
     let solution = disk
         .iter()
         .filter(|&&c| c >= 0)
         .enumerate()
         .map(|(i, &c)| i as u64 * c as u64)
-        .sum::<u64>()
-        .into();
+        .sum::<u64>();
     solution
 }
 
@@ -75,7 +71,6 @@ fn solve_a(input: &str) -> u64 {
 struct Block {
     pos: u64,
     len: u64,
-    is_free: bool,
     id: u64,
 }
 
@@ -90,12 +85,7 @@ fn solve_b(input: &str) -> u64 {
     let mut pos = 0;
     for b in disks_map {
         let len = b.to_string().parse::<u64>().unwrap();
-        let block = Block {
-            pos,
-            len,
-            is_free,
-            id,
-        };
+        let block = Block { pos, len, id };
         if !is_free {
             files.push(block);
             id += 1;
@@ -109,15 +99,12 @@ fn solve_b(input: &str) -> u64 {
 
     for i in (0..files.len()).rev() {
         let f = files.get_mut(i).unwrap();
-        match free.iter_mut().filter(|b| b.len >= f.len).next() {
-            Some(b) => {
-                if f.pos > b.pos {
-                    f.pos = b.pos;
-                    b.pos += f.len;
-                    b.len -= f.len;
-                }
+        if let Some(b) = free.iter_mut().find(|b| b.len >= f.len) {
+            if f.pos > b.pos {
+                f.pos = b.pos;
+                b.pos += f.len;
+                b.len -= f.len;
             }
-            None => (),
         }
     }
 
@@ -134,8 +121,7 @@ fn to_string(files: &Vec<Block>) -> String {
     let last = files
         .iter()
         .sorted_by(|a, b| a.pos.cmp(&b.pos))
-        .rev()
-        .next()
+        .next_back()
         .unwrap();
     let length = last.pos + last.len;
     let mut s = ".".repeat(length as usize);
