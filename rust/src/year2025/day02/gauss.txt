@@ -1,0 +1,15 @@
+sum_(i=1)^n i = n*(n+1)/2
+
+sum_(i=k)^n i = sum_(i=1)^(n-k) i + k * (n-k+1)
+              = (n-k)*(n-k+1)/2 + kn - k^2
+              = (n^2 - nk + n - nk + k^2 - k) / 2 + kn - k^2 + k
+              = (n^2 - nk + n - nk + k^2 - k + 2kn - 2k^2 + 2k) / 2
+              = (n^2 + n - k^2 + k) / 2
+
+sum_(i=k)^n i = sum_(i=1)^n i - sum_(i=1)^(k-1) i
+              = n*(n+1)/2 - (k-1)*k/2
+              = (n^2-k^2+n+k) / 2
+
+x x x x
+x x x x x
+x x x x x x
